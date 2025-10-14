@@ -1,4 +1,10 @@
-import { createContext, useContext, useState, type ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  type ReactNode,
+} from "react";
 
 interface User {
   name: string;
@@ -22,6 +28,13 @@ interface AuthProviderProps {
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<User | null>(null);
 
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
+
   const login = (name: string, lastName: string) => {
     const newUser = {
       name: name.toLowerCase(),
@@ -34,10 +47,12 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }
 
     setUser(newUser);
+    localStorage.setItem("user", JSON.stringify(newUser));
   };
 
   const logout = () => {
     setUser(null);
+    localStorage.setItem("user", JSON.stringify(null));
   };
 
   return (
