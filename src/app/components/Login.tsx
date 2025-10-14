@@ -10,14 +10,14 @@ export default function Login() {
   const router = useRouter();
   useEffect(() => {
     if (user) {
-      console.log("Logged in");
+      router.replace("/videos");
     }
   }, [user, router]);
 
   const handleSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
     login(name.trim(), lastName.trim());
-    console.log("Logged in");
+    router.replace("/videos");
   };
 
   return (
@@ -42,6 +42,7 @@ export default function Login() {
               <label className="text-label">First Name</label>
               <input
                 type="text"
+                id="first-name"
                 value={name}
                 onChange={(e) => {
                   e.preventDefault();
@@ -55,6 +56,7 @@ export default function Login() {
               <label className="text-label">Last Name</label>
               <input
                 type="text"
+                id="last-name"
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
                 className="input-field capitalize"
