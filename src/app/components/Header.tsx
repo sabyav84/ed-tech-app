@@ -5,7 +5,7 @@ import { Play, Plus, LogOut } from "lucide-react";
 export default function Header({
   setShowCreateModal,
 }: {
-  setShowCreateModal: any;
+  setShowCreateModal?: any;
 }) {
   const { user, logout } = useAuth();
   const router = useRouter();
@@ -43,7 +43,7 @@ export default function Header({
           </div>
 
           <div className="flex items-center space-x-3">
-            {user?.isAdmin && (
+            {user?.isAdmin && setShowCreateModal && (
               <button
                 onClick={() => setShowCreateModal(true)}
                 className="bg-indigo-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-indigo-700 transition-colors shadow-md hover:shadow-lg"
