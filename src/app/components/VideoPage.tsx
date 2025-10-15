@@ -1,6 +1,6 @@
 import ReactPlayer from "react-player";
 import Header from "@/components/Header";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 import React, { useEffect, useState } from "react";
 import {
@@ -24,6 +24,7 @@ function VideoPage() {
   const params = useParams();
   const id = (params as any)?.id as string | undefined;
   const { user } = useAuth();
+  const router = useRouter();
   const [selectedVideo, setSelectedVideo] = useState<Video | null>(null);
   const [comments, setComments] = useState<VideoComment[]>([]);
   console.log("comments", comments);
@@ -94,7 +95,8 @@ function VideoPage() {
     id && fetchComments(id);
   }, [id]);
 
-  if (!user || loading) return <Loader />;
+  if (loading) return <Loader />;
+  if (!user) return router.replace("/");
 
   return (
     <div className="bg-white">

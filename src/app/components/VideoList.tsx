@@ -131,7 +131,8 @@ export default function VideoList() {
       video.description?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  if (!user || loading) return <Loader />;
+  if (loading) return <Loader />;
+  if (!user) return router.replace("/");
 
   return (
     <div className="bg-white">
