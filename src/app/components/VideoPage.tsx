@@ -36,6 +36,9 @@ function VideoPage() {
       setSelectedVideo(data.video);
     } catch (error) {
       console.error("Error fetching videos:", error);
+      (window as any).showError?.(
+        "Unable to fetch videos right now. Please try again later."
+      );
     }
   };
 
@@ -47,6 +50,9 @@ function VideoPage() {
       setComments(data.comments || []);
     } catch (error) {
       console.error("Error fetching comments:", error);
+      (window as any).showError?.(
+        "Unable to fetch comments right now. Please try again later."
+      );
     }
   };
 
@@ -69,6 +75,9 @@ function VideoPage() {
       }
     } catch (error) {
       console.error("Error posting comment:", error);
+      (window as any).showError?.(
+        "Unable to create the comment right now. Please try again later."
+      );
     }
   };
 

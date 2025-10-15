@@ -44,6 +44,9 @@ export default function VideoList() {
       setVideos(data.videos || []);
     } catch (error) {
       console.error("Error fetching videos:", error);
+      (window as any).showError?.(
+        "Unable to fetch videos right now. Please try again later."
+      );
       setLoading(false);
     } finally {
       setLoading(false);
@@ -73,6 +76,9 @@ export default function VideoList() {
       }
     } catch (error) {
       console.error("Error creating video:", error);
+      (window as any).showError?.(
+        "Unable to create the video right now. Please try again later."
+      );
     } finally {
       setLoading(false);
     }

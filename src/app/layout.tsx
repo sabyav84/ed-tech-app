@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import "./globals.css";
 import { Providers } from "./providers";
+import ErrorToaster from "@/components/ErrorToaster";
 
 export const metadata = {
   title: "educational_video_app",
@@ -11,7 +12,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
       <body>
-        <Providers>{children}</Providers>
+        <Providers>
+          {children}
+          <ErrorToaster />
+        </Providers>
       </body>
     </html>
   );
