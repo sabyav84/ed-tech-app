@@ -16,23 +16,8 @@ import {
   MediaMuteButton,
   MediaFullscreenButton,
 } from "media-chrome/react";
+import { Video, VideoComment } from "@/types";
 
-interface Video {
-  id: string;
-  title: string;
-  description: string;
-  video_url: string;
-  view_count?: number;
-  comment_count?: number;
-  created_at: string;
-}
-
-interface VideoComment {
-  id: string;
-  user_id: string;
-  content: string;
-  created_at: string;
-}
 function VideoPage() {
   const [loading, setLoading] = useState(true);
   const params = useParams();
