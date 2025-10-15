@@ -75,18 +75,18 @@ Smooth Animations: Hover, transitions, and loading effect
 
 Better UX: Toaster messages give instant feedback on errors
 
-### Video Demo
+## Video Demo
 
 [Video Demo](<[https://www.youtube.com/watch?v=dQw4w9WgXcQ](https://youtu.be/UNzQc46z9cw)>)
 
-### Login Page
+## Login Page
 
 ![Login Page](/screenshots/Login.png)
 
-### VideoList Page
+## VideoList Page
 
 ![Video List Page](/screenshots/VideoList.png)
 
-### Video Page
+## Video Page
 
 ![Video Page](/screenshots/Video.png)
