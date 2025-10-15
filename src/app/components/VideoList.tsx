@@ -3,6 +3,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useEffect, useState, type SetStateAction } from "react";
 import { Clock, Edit, MessageSquare, Play, Search, X } from "lucide-react";
 import Header from "@/components/Header";
+import Loader from "@/components/Loader";
 
 interface Video {
   id: string;
@@ -128,7 +129,7 @@ export default function VideoList() {
       video.description?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  if (!user || loading) return <p>Loading...</p>;
+  if (!user || loading) return <Loader />;
 
   return (
     <div className="bg-white">

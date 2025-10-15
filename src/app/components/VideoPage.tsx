@@ -17,6 +17,7 @@ import {
   MediaFullscreenButton,
 } from "media-chrome/react";
 import { Video, VideoComment } from "@/types";
+import Loader from "@/components/Loader";
 
 function VideoPage() {
   const [loading, setLoading] = useState(true);
@@ -83,6 +84,8 @@ function VideoPage() {
   useEffect(() => {
     id && fetchComments(id);
   }, [id]);
+
+  if (!user || loading) return <Loader />;
 
   return (
     <div className="bg-white">
