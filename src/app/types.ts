@@ -3,9 +3,9 @@ export interface Video {
   title: string;
   description: string;
   video_url: string;
-  view_count?: number;
-  comment_count?: number;
+  num_comments: number;
   created_at: string;
+  user_id: string;
 }
 
 export interface VideoComment {

@@ -4,16 +4,9 @@ import { useEffect, useState, type SetStateAction } from "react";
 import { Clock, Edit, MessageSquare, Play, Search, X } from "lucide-react";
 import Header from "@/components/Header";
 import Loader from "@/components/Loader";
-
-interface Video {
-  id: string;
-  title: string;
-  description: string;
-  video_url: string;
-  num_comments: number;
-  created_at: string;
-  user_id: string;
-}
+import { Video } from "@/types";
+import EditVideoModal from "@/components/EditVideoModal";
+import CreateVideoModal from "@/components/CreateVideoModal";
 
 export default function VideoList() {
   const { user } = useAuth();
@@ -24,7 +17,6 @@ export default function VideoList() {
   const [searchQuery, setSearchQuery] = useState("");
   const [showEditModal, setShowEditModal] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState(false);
-  const [selectedVideo, setSelectedVideo] = useState<Video | null>(null);
 
   const [newVideo, setNewVideo] = useState({
     title: "",
@@ -43,20 +35,23 @@ export default function VideoList() {
   }, []);
 
   const fetchVideos = async () => {
+    setLoading(true);
     try {
       const response = await fetch(
         `/api/videos?user_id=${process.env.NEXT_PUBLIC_ADMIN_USER_ID}`
       );
       const data = await response.json();
       setVideos(data.videos || []);
-      setLoading(false);
     } catch (error) {
       console.error("Error fetching videos:", error);
+      setLoading(false);
+    } finally {
       setLoading(false);
     }
   };
 
   const createVideo = async () => {
+    setLoading(true);
     if (!newVideo.title || !newVideo.description || !newVideo.video_url) return;
 
     try {
@@ -78,12 +73,15 @@ export default function VideoList() {
       }
     } catch (error) {
       console.error("Error creating video:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
   const updateVideo = async () => {
     if (!editVideo.title || !editVideo.description) return;
 
+    setLoading(true);
     try {
       const response = await fetch(`/api/videos`, {
         method: "PUT",
@@ -99,12 +97,11 @@ export default function VideoList() {
         setShowEditModal(false);
         setEditVideo({ id: "", title: "", description: "" });
         fetchVideos();
-        if (selectedVideo && selectedVideo.id === editVideo.id) {
-          setSelectedVideo({ ...selectedVideo, ...editVideo });
-        }
       }
     } catch (error) {
       console.error("Error updating video:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -119,8 +116,7 @@ export default function VideoList() {
 
   const openVideo = (video: SetStateAction<Video | null>) => {
     if (!video) return;
-    setSelectedVideo(video);
-    router.push(`/videos/${(video as any)?.id as string}`);
+    router.push(`/videos/${(video as Video)?.id as string}`);
   };
 
   const filteredVideos = videos.filter(
@@ -216,135 +212,22 @@ export default function VideoList() {
           </div>
         )}
       </main>
-      {showCreateModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold text-gray-800">
-                Upload New Video
-              </h2>
-              <button
-                onClick={() => setShowCreateModal(false)}
-                className="text-gray-400 hover:text-gray-600"
-              >
-                <X className="w-6 h-6" />
-              </button>
-            </div>
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Video Title
-                </label>
-                <input
-                  type="text"
-                  id="create-title"
-                  value={newVideo.title}
-                  onChange={(e) =>
-                    setNewVideo({ ...newVideo, title: e.target.value })
-                  }
-                  className="input-field"
-                  placeholder="Enter video title"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Description
-                </label>
-                <textarea
-                  id="create-description"
-                  value={newVideo.description}
-                  onChange={(e) =>
-                    setNewVideo({ ...newVideo, description: e.target.value })
-                  }
-                  className="input-field"
-                  rows={3}
-                  placeholder="Describe your video"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Video URL
-                </label>
-                <input
-                  type="url"
-                  id="create-url"
-                  value={newVideo.video_url}
-                  onChange={(e) =>
-                    setNewVideo({ ...newVideo, video_url: e.target.value })
-                  }
-                  className="input-field"
-                  placeholder="https://example.com/video.mp4"
-                />
-              </div>
-              <button
-                onClick={createVideo}
-                disabled={
-                  !newVideo.title ||
-                  !newVideo.description ||
-                  !newVideo.video_url
-                }
-                className="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 transition-colors shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                Upload Video
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-      {showEditModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold text-gray-800">Edit Video</h2>
-              <button
-                onClick={() => setShowEditModal(false)}
-                className="text-gray-400 hover:text-gray-600"
-              >
-                <X className="w-6 h-6" />
-              </button>
-            </div>
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Video Title
-                </label>
-                <input
-                  type="text"
-                  id="update-title"
-                  value={editVideo.title}
-                  onChange={(e) =>
-                    setEditVideo({ ...editVideo, title: e.target.value })
-                  }
-                  className="input-field"
-                  placeholder="Enter video title"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Description
-                </label>
-                <textarea
-                  id="update-description"
-                  value={editVideo.description}
-                  onChange={(e) =>
-                    setEditVideo({ ...editVideo, description: e.target.value })
-                  }
-                  className="input-field"
-                  rows={3}
-                  placeholder="Describe your video"
-                />
-              </div>
-              <button
-                onClick={updateVideo}
-                disabled={!editVideo.title || !editVideo.description}
-                className="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 transition-colors shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                Update Video
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+
+      <CreateVideoModal
+        showCreateModal={showCreateModal}
+        setShowCreateModal={setShowCreateModal}
+        newVideo={newVideo}
+        setNewVideo={setNewVideo}
+        createVideo={createVideo}
+      />
+
+      <EditVideoModal
+        showEditModal={showEditModal}
+        setShowEditModal={setShowEditModal}
+        editVideo={editVideo}
+        setEditVideo={setEditVideo}
+        updateVideo={updateVideo}
+      />
     </div>
   );
 }
