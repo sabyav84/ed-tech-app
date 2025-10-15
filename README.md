@@ -77,7 +77,7 @@ Better UX: Toaster messages give instant feedback on errors
 
 ## Video Demo
 
-[Video Demo](<[https://www.youtube.com/watch?v=dQw4w9WgXcQ](https://youtu.be/UNzQc46z9cw)>)
+[Video Demo](https://youtu.be/UNzQc46z9cw)
 
 ## Login Page
 
