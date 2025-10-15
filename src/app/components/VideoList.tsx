@@ -141,7 +141,7 @@ export default function VideoList() {
               placeholder="Search videos by title or description..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-4 py-3 border text-gray-600 border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent shadow-sm"
+              className="w-full pl-12 pr-4 py-3 border text-gray-600 border-gray-300 rounded-xl focus-visible:border focus-visible:border-indigo-500 focus:border-2 focus:border-indigo-500 shadow-sm"
             />
           </div>
         </div>
